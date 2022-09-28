@@ -94,6 +94,11 @@ TARGET_KERNEL_SOURCE := kernel/realme/r5x
 TARGET_KERNEL_CLANG_COMPILE := true
 TARGET_KERNEL_CONFIG := vendor/r5x_defconfig
 
+# Prebuilt kernel
+TARGET_FORCE_PREBUILT_KERNEL := true
+TARGET_PREBUILT_KERNEL := $(TARGET_KERNEL_SOURCE)/prebuilt/Image.gz-dtb
+BOARD_PREBUILT_DTBOIMAGE := $(TARGET_KERNEL_SOURCE)/prebuilt/dtbo.img
+
 # QCOM hardware
 BOARD_USES_QCOM_HARDWARE := true
 
