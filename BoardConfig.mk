@@ -27,20 +27,11 @@ DEVICE_PATH := device/realme/r5x
 BOARD_VENDOR := realme
 
 BUILD_BROKEN_DUP_RULES := true
+
 BUILD_BROKEN_USES_BUILD_COPY_HEADERS := true
 BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
 BUILD_BROKEN_VENDOR_PROPERTY_NAMESPACE := true
 BUILD_BROKEN_ENFORCE_SYSPROP_OWNER := true
-
-# Assert
-TARGET_OTA_ASSERT_DEVICE := RMX1911,RMX1925,RMX1927,RMX2030,r5x
-
-# Boot animation
-TARGET_SCREEN_HEIGHT := 1600
-TARGET_SCREEN_WIDTH := 720
-
-# Display
-TARGET_SCREEN_DENSITY := 320
 
 # Android Verified Boot
 BOARD_AVB_ENABLE := true
@@ -50,19 +41,6 @@ BOARD_AVB_RECOVERY_ALGORITHM := SHA256_RSA4096
 BOARD_AVB_RECOVERY_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
 BOARD_AVB_RECOVERY_ROLLBACK_INDEX := 1
 BOARD_AVB_RECOVERY_ROLLBACK_INDEX_LOCATION := 1
-
-# Bootloader
-TARGET_BOOTLOADER_BOARD_NAME := trinket
-TARGET_NO_BOOTLOADER := true
-
-# Platform
-TARGET_BOARD_PLATFORM := trinket
-TARGET_BOARD_PLATFORM_GPU := qcom-adreno610
-
-# Properties
-BOARD_PROPERTY_OVERRIDES_SPLIT_ENABLED := true
-TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
-TARGET_PRODUCT_PROP += $(DEVICE_PATH)/product.prop
 
 # Architecture
 TARGET_ARCH := arm64
@@ -81,31 +59,14 @@ TARGET_2ND_CPU_VARIANT_RUNTIME := cortex-a73
 
 TARGET_USES_64_BIT_BINDER := true
 
-# Kernel
-BOARD_KERNEL_BASE := 0x00000000
-BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200n8 androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1 lpm_levels.sleep_disabled=1 msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=1 earlycon=msm_geni_serial,0x4a90000 loop.max_part=7 cgroup.memory=nokmem,nosocket
-BOARD_KERNEL_CMDLINE += androidboot.init_fatal_reboot_target=recovery
-BOARD_KERNEL_CMDLINE += kpti=off
-#BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
-BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
-BOARD_KERNEL_PAGESIZE := 4096
-BOARD_KERNEL_OFFSET := 0x00008000
-BOARD_KERNEL_TAGS_OFFSET := 0x00000100
-BOARD_RAMDISK_OFFSET := 0x01000000
-BOARD_KERNEL_SEPARATED_DTBO := true
+# Assert
+TARGET_OTA_ASSERT_DEVICE := RMX1911,RMX1925,RMX1927,RMX2030,r5x
 
-TARGET_KERNEL_SOURCE := kernel/realme/r5x
-TARGET_KERNEL_CONFIG := vendor/RMX1911_defconfig
-
-# Prebuilt kernel
-ifneq "$(wildcard $(TARGET_KERNEL_SOURCE)/prebuilt )" ""
-TARGET_FORCE_PREBUILT_KERNEL := true
-TARGET_PREBUILT_KERNEL := $(TARGET_KERNEL_SOURCE)/prebuilt/Image.gz-dtb
-BOARD_PREBUILT_DTBOIMAGE := $(TARGET_KERNEL_SOURCE)/prebuilt/dtbo.img
-endif
-
-# QCOM hardware
+# Platform
+## QCOM hardware
 BOARD_USES_QCOM_HARDWARE := true
+TARGET_BOARD_PLATFORM := trinket
+TARGET_BOARD_PLATFORM_GPU := qcom-adreno610
 
 # ANT+
 BOARD_ANT_WIRELESS_DEVICE := "qualcomm-hidl"
@@ -122,12 +83,69 @@ AUDIO_FEATURE_ENABLED_PROXY_DEVICE := true
 AUDIO_FEATURE_ENABLED_FM_POWER_OPT := true
 USE_CUSTOM_AUDIO_POLICY := 0
 
+# Boot animation
+TARGET_SCREEN_HEIGHT := 1600
+TARGET_SCREEN_WIDTH := 720
+
+# Bootloader
+TARGET_BOOTLOADER_BOARD_NAME := trinket
+TARGET_NO_BOOTLOADER := true
+
 # Bluetooth
 BOARD_HAVE_BLUETOOTH_QCOM := true
 BLUETOOTH_HCI_USE_MCT := true
 TARGET_USE_QTI_BT_SAR := true
 TARGET_USE_QTI_BT_CHANNEL_AVOIDANCE := true
 BOARD_USES_COMMON_BLUETOOTH_HAL := true
+
+# Display
+TARGET_SCREEN_DENSITY := 320
+
+# Properties
+BOARD_PROPERTY_OVERRIDES_SPLIT_ENABLED := true
+TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
+TARGET_PRODUCT_PROP += $(DEVICE_PATH)/product.prop
+
+# Kernel
+BOARD_KERNEL_BASE := 0x00000000
+BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200n8 androidboot.hardware=qcom androidboot.console=ttyMSM0 androidboot.memcg=1 lpm_levels.sleep_disabled=1 msm_rtb.filter=0x237 service_locator.enable=1 swiotlb=1 earlycon=msm_geni_serial,0x4a90000 loop.max_part=7 cgroup.memory=nokmem,nosocket
+BOARD_KERNEL_CMDLINE += androidboot.init_fatal_reboot_target=recovery
+BOARD_KERNEL_CMDLINE += kpti=off
+#BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
+BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
+BOARD_KERNEL_PAGESIZE := 4096
+TARGET_KERNEL_HEADER_ARCH := arm64
+BOARD_KERNEL_OFFSET := 0x00008000
+BOARD_KERNEL_TAGS_OFFSET := 0x00000100
+BOARD_RAMDISK_OFFSET := 0x01000000
+BOARD_KERNEL_SEPARATED_DTBO := true
+TARGET_KERNEL_SOURCE := kernel/realme/r5x
+TARGET_KERNEL_CONFIG := vendor/RMX1911_defconfig
+
+# Prebuilt kernel
+ifneq "$(wildcard $(TARGET_KERNEL_SOURCE)/prebuilt )" ""
+TARGET_FORCE_PREBUILT_KERNEL := true
+TARGET_PREBUILT_KERNEL := $(TARGET_KERNEL_SOURCE)/prebuilt/Image.gz-dtb
+BOARD_PREBUILT_DTBOIMAGE := $(TARGET_KERNEL_SOURCE)/prebuilt/dtbo.img
+endif
+
+# Set Header version for bootimage
+ifneq ($(strip $(TARGET_KERNEL_APPEND_DTB)),true)
+#Enable dtb in boot image and Set Header version
+BOARD_INCLUDE_DTB_IN_BOOTIMG := true
+BOARD_BOOTIMG_HEADER_VERSION := 2
+else
+BOARD_BOOTIMG_HEADER_VERSION := 1
+endif
+BOARD_MKBOOTIMG_ARGS := --header_version $(BOARD_BOOTIMG_HEADER_VERSION)
+#Generate DTBO image
+BOARD_KERNEL_SEPARATED_DTBO := true
+ifeq ($(BOARD_KERNEL_SEPARATED_DTBO),true)
+    # Enable DTBO for recovery image
+    BOARD_INCLUDE_RECOVERY_DTBO := true
+endif
+
+
 
 # Camera
 TARGET_USES_QTI_CAMERA_DEVICE := true
