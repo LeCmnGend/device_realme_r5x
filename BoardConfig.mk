@@ -127,6 +127,7 @@ ifneq "$(wildcard $(TARGET_KERNEL_SOURCE)/prebuilt )" ""
 TARGET_FORCE_PREBUILT_KERNEL := true
 TARGET_PREBUILT_KERNEL := $(TARGET_KERNEL_SOURCE)/prebuilt/Image.gz-dtb
 BOARD_PREBUILT_DTBOIMAGE := $(TARGET_KERNEL_SOURCE)/prebuilt/dtbo.img
+BOARD_PREBUILT_DTBIMAGE := $(TARGET_KERNEL_SOURCE)/prebuilt/dtb.img
 endif
 
 # Set Header version for bootimage
